@@ -1,0 +1,10 @@
+# File types
+*.swp
+# Files
+.DS_Store
+# Binaries
+bin/
+# Data directory stores page content. Track the directory, but not the content,
+# which should vary by project/installation.
+data/**
+!data/README.md
