@@ -1,7 +1,8 @@
+// Wiki serves content for viewing and modifying data via HTTP.
+
 package wiki
 
 import (
-	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -17,14 +18,11 @@ type Directory struct {
 	Pages []Page
 }
 
-// rootDir is a path from the project bin to the root directory
-var rootDir = "../"
-
-// tempDir is a path from the project root to the templates directory
-var tempDir = rootDir + "assets/templates/"
-
-// dataDir is a path from the project root to the data directory
-var dataDir = rootDir + "data/"
+const (
+	rootDir = "../"
+	tempDir = rootDir + "assets/templates/"
+	dataDir = rootDir + "data/"
+)
 
 // templates are html templates that are required before serving content
 var templates = template.Must(template.ParseFiles(tempDir+"index.html", tempDir+"edit.html", tempDir+"view.html"))
@@ -138,11 +136,4 @@ func MakeHandler(f func(http.ResponseWriter, *http.Request, string)) http.Handle
 		}
 		f(w, r, t[2])
 	}
-}
-
-func main() {
-	//http.HandleFunc("/view/", makeHandler(viewHandler))
-	//http.HandleFunc("/edit/", makeHandler(editHandler))
-	//http.HandleFunc("/save/", makeHandler(saveHandler))
-	//http.ListenAndServe(":8080", nil)
 }
