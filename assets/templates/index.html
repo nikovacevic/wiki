@@ -1,0 +1,8 @@
+<h1>wiki</h1>
+<div>
+  <ul>
+    {{range .Pages}}
+      <li><a href="/view/{{.Title}}">{{.Title}}</a></li>
+    {{end}}
+  </ul>
+</div>

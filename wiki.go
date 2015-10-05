@@ -1,6 +1,7 @@
 package wiki
 
 import (
+	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -10,6 +11,10 @@ import (
 type Page struct {
 	Title string
 	Body  []byte
+}
+
+type Directory struct {
+	Pages []Page
 }
 
 // rootDir is a path from the project bin to the root directory
@@ -22,7 +27,7 @@ var tempDir = rootDir + "assets/templates/"
 var dataDir = rootDir + "data/"
 
 // templates are html templates that are required before serving content
-var templates = template.Must(template.ParseFiles(tempDir+"edit.html", tempDir+"view.html"))
+var templates = template.Must(template.ParseFiles(tempDir+"index.html", tempDir+"edit.html", tempDir+"view.html"))
 
 // validPath defines the set of valid URL paths
 var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
@@ -44,9 +49,46 @@ func loadPage(title string) (*Page, error) {
 	return &Page{Title: title, Body: body}, nil
 }
 
+//
+func loadDirectory() (*Directory, error) {
+	d := Directory{}
+	files, err := ioutil.ReadDir(rootDir + "data/")
+	if err != nil {
+		return nil, err
+	}
+	if len(files) <= 0 {
+		return nil, nil
+	}
+	// fmt.Println("./data")
+	for _, f := range files {
+		if f.Name() == "README.md" {
+			continue
+		}
+		t := f.Name()[:len(f.Name())-len(".txt")]
+		// fmt.Println("|-" + t + ": " + f.Name())
+		d.Pages = append(d.Pages, Page{Title: t})
+	}
+	return &d, nil
+}
+
 // renderTemplate renders an HTML template, identified by temp
 func renderTemplate(w http.ResponseWriter, t string, p *Page) {
 	err := templates.ExecuteTemplate(w, t+".html", p)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+// IndexHandler serves a directory listing of Pages
+func IndexHandler(w http.ResponseWriter, r *http.Request) {
+	d, err := loadDirectory()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	if d == nil {
+		http.Redirect(w, r, "/edit/page", http.StatusFound)
+	}
+	err = templates.ExecuteTemplate(w, "index.html", d)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

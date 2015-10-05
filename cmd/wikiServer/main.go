@@ -6,6 +6,7 @@ import (
 )
 
 func main() {
+	http.HandleFunc("/", wiki.IndexHandler)
 	http.HandleFunc("/view/", wiki.MakeHandler(wiki.ViewHandler))
 	http.HandleFunc("/edit/", wiki.MakeHandler(wiki.EditHandler))
 	http.HandleFunc("/save/", wiki.MakeHandler(wiki.SaveHandler))
