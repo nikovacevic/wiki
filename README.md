@@ -9,6 +9,10 @@ It is an exercise in implementing a server using
 a Go project, and becoming more familiar with Go syntax and features.
 
 TODO  
+- Homepage  
+  - Provide "Add new page" option
+  - Provide search, sort, and pagination of options
+- Pages
+  - Provide "Rename" option
 - Use given directory structure without global directory vars  
-- Implement layouts, CSS, JS, etc. in views.  
-- Add a homepage. Catalog of pages, navigation tool, etc.  
+- Implement layouts, CSS, JS, etc. in views.   
