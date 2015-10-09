@@ -11,8 +11,11 @@ the long-term, it should present challenges such as dependency management
 and implementation of modular design patterns.
 
 ## TODO
-- Rethink directory structure and how it interacts with the bootstrapping
-process
+- Rethink directory structure to optimize:
+  - Clarity
+  - Modularity
+  - Durability, flexibility
+- Implement errorHandler to wrap handlerFuncs
 - Implement layouts templates, CSS, and JS
 - Data-related
   - Store persistent data in a database
